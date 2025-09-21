@@ -1,45 +1,88 @@
-# 🔥 US Fire Department and Station Registry Map
+# 🚒 Fire Department Data & Dashboard
 
-Welcome to the **US Fire Department and Station Registry Map**, a powerful and interactive Streamlit application that visualizes two comprehensive datasets from the U.S. Fire Administration (USFA).
-
-This project makes it easy to explore and analyze the distribution and key statistics of fire departments and their stations across the United States.
+Welcome to the Fire Department Data & Dashboard project! This project visualizes US fire department and station data on an interactive map using Python and Streamlit.
 
 ---
 
-## 🛠️ How to Use
+## 🗺️ Dashboard Features
 
-### 1. Prerequisites
-
-Before you get started, make sure you have **Python 3.7 or newer** installed. You will also need to install the required libraries:
-
-    pip install streamlit pandas geopy
-
-### 2. Project Setup
-
-Ensure the two CSV files are in the same directory as the `app.py` script. The file names must be exactly:
-
-    usfa-registry-national-1.csv
-    usfa-registry-station.csv
-
-### 3. Run the Application
-
-Navigate to the project directory in your terminal and run the following command:
-
-    streamlit run app.py
-
-Your web browser will automatically open a new tab with the application.
-
-### 4. Exploring the App
-
-- **Interactive Map:** The map displays the location of fire department headquarters based on their city and state. You can zoom, pan, and click on individual data points.
-- **Filters:** Use the sidebar to filter the data by state and department type (e.g., Volunteer, Career, Mostly volunteer). This allows you to focus on specific regions and types of fire departments.
-- **Key Metrics:** The dashboard provides key statistics, such as the total number of departments, stations, and firefighters, which update dynamically based on your filters.
+- **Interactive Map:**
+  - Visualize fire stations across the US
+  - Filter by state, department type, and more
+  - Click on markers for department/station details
+- **Summary Statistics:**
+  - Number of stations, types, and personnel
+- **Modern UI:**
+  - Clean, responsive, and visually appealing
 
 ---
 
-## 📈 About the Data
+## 📊 Example Data
 
-This application uses data from the U.S. Fire Administration's National Fire Department Registry.
+| Fire Dept Name | Station Name | Station Address | City | State | Zip |
+|---------------|-------------|----------------|------|-------|-----|
+| Abbeville Fire Department | Central Station | 210 W Vermillion ST | Abbeville | LA | 70510-4612 |
+| 3-G Volunteer Fire Company, Inc. | 3-G Volunteer Fire Company, Inc. | Brantingham RD | Brantingham | NY | 13312 |
 
-- **usfa-registry-national-1.csv:** Contains comprehensive details about fire departments, including their name, address, number of stations, and active firefighter counts by type (career, volunteer, etc.).
-- **usfa-registry-station.csv:** Contains specific information about each individual station associated with the departments in the national registry.
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+```bash
+git clone <your-repo-url>
+cd fire-department
+```
+
+### 2. Install requirements
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the Streamlit app
+```bash
+streamlit run dashboard.py
+```
+
+---
+
+## 🛠️ Requirements
+- Python 3.8+
+- Streamlit
+- pandas
+- geopy (for geocoding addresses)
+- folium or pydeck (for mapping)
+
+Install all with:
+```bash
+pip install streamlit pandas geopy folium
+```
+
+---
+
+## 📂 File Structure
+
+```
+fire-department/
+├── dashboard.py           # Streamlit dashboard app
+├── requirements.txt       # Python dependencies
+├── usfa-registry-national.csv
+├── usfa-registry-station.csv
+└── README.md
+```
+
+---
+
+## ✨ Screenshots
+
+![Dashboard Screenshot](assets/dashboard-screenshot.png)
+
+---
+
+## 🤝 Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 📄 License
+[MIT](LICENSE)
