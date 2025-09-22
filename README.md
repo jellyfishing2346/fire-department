@@ -51,12 +51,23 @@ streamlit run dashboard.py
 - Streamlit
 - pandas
 - geopy (for geocoding addresses)
-- folium or pydeck (for mapping)
+- folium
+- streamlit-folium
+- numpy
+- plotly
+- plotly-express
+- plotly-graph-objects
 
 Install all with:
 ```bash
-pip install streamlit pandas geopy folium
+pip install -r requirements.txt
 ```
+
+---
+
+## 📦 Deployment Notes
+- Ensure your `requirements.txt` includes all dependencies above for successful deployment (especially on Streamlit Cloud).
+- If you see `ModuleNotFoundError`, add the missing package to `requirements.txt` and redeploy.
 
 ---
 
