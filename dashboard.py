@@ -51,7 +51,7 @@ if 'recent_activity' not in st.session_state:
 # Theme selection in sidebar (Priority 1: Dark/Light Mode)
 with st.sidebar:
     st.markdown("### 🎨 Display Settings")
-    theme = st.selectbox("Theme", ["Light Mode", "Dark Mode"], key="theme_selector")
+    theme = st.selectbox("Theme", ["Light Mode", "Dark Mode"], index=1, key="theme_selector")
 
 # Dynamic CSS based on theme selection
 def get_theme_css(theme):
