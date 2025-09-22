@@ -1,0 +1,4 @@
+FDID,Fire Dept Name,Dept Type,Station Name,Station Addr1,Station City,Station State,Station Zip,lat,lon
+00001,Sample Fire Dept,Volunteer,Central Station,123 Main St,Sampletown,CA,90001,34.0522,-118.2437
+00002,Another Fire Dept,Career,Station 2,456 Oak Ave,Anotherville,TX,73301,30.2672,-97.7431
+00003,Test Fire Dept,Mostly volunteer,Station 3,789 Pine Rd,Testville,NY,10001,40.7128,-74.0060

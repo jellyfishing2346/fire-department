@@ -12,21 +12,21 @@ geolocator = Nominatim(user_agent="fire_dept_map_batch")
 geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
 
 def get_lat_lon(row):
-    address = f"{row['Station Addr1']}, {row['Station City']}, {row['Station State']} {row['Station Zip']}"
+    # Build the best possible address
+    address = f"{row.get('Station Name', '')}, {row.get('Station Addr1', '')}, {row.get('Station City', '')}, {row.get('Station State', '')} {row.get('Station Zip', '')}, USA"
     try:
-        location = geolocator.geocode(address)
+        location = geocode(address)
         if location:
             return pd.Series({'lat': location.latitude, 'lon': location.longitude})
     except Exception:
         pass
     return pd.Series({'lat': None, 'lon': None})
 
-# Only geocode if lat/lon not already present
-if 'lat' not in df.columns or 'lon' not in df.columns:
-    coords = df.apply(get_lat_lon, axis=1)
-    df = pd.concat([df, coords], axis=1)
-    df.to_csv("usfa-registry-station"
-    "-geocoded.csv", index=False)
-    print("Geocoding complete! Saved as usfa-registry-station-geocoded.csv")
-else:
-    print("Latitude/Longitude columns already exist.")
+# Always geocode all rows, add lat/lon columns
+coords = df.apply(get_lat_lon, axis=1)
+df['lat'] = coords['lat']
+df['lon'] = coords['lon']
+
+# Save output with lat/lon columns
+df.to_csv("usfa-registry-station-geocoded.csv", index=False)
+print("Geocoding complete! Saved as usfa-registry-station-geocoded.csv")
