@@ -4,5 +4,3 @@ folium
 streamlit-folium
 numpy
 plotly
-plotly-express
-plotly-graph-objects
