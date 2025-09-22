@@ -10,6 +10,26 @@ import plotly.graph_objects as go
 import time
 import json
 
+st.markdown("""
+    <style>
+    /* Improve table readability in light mode */
+    .stDataFrame, .stTable, .stMarkdown table {
+        color: #222 !important;
+        background: #fff !important;
+        border-radius: 6px;
+        border: 1px solid #ddd !important;
+    }
+    .stDataFrame th, .stDataFrame td,
+    .stTable th, .stTable td,
+    .stMarkdown table th, .stMarkdown table td {
+        color: #222 !important;
+        background: #fff !important;
+        border: 1px solid #ddd !important;
+        padding: 8px 10px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Set page config to match NERIS style
 st.set_page_config(
     page_title="NERIS Department Dashboard", 
@@ -240,11 +260,23 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# --- Simulated Data Size Control ---
+# NOTE: This slider only affects simulated data for demo/testing. Real CSV data is never lost or affected.
+with st.sidebar:
+    st.markdown('---')
+    st.markdown('### ⚙️ Simulation Settings')
+    num_simulated_departments = st.slider(
+        'Number of Simulated Departments',
+        min_value=50, max_value=500, value=100, step=10,
+        help='Affects only simulated data for demo/testing. Real CSV data is never lost.'
+    )
+
 # Generate realistic department data with enhanced features
 @st.cache_data
-def generate_enhanced_neris_data():
-    """Generate department data with verification workflow features"""
-    
+# Accept num_departments as parameter
+
+def generate_enhanced_neris_data(num_departments=100):
+    """Generate department data with verification workflow features. Only affects simulated/demo data."""
     regions = [
         {"state": "NY", "city": "New York", "lat": 40.7128, "lon": -74.0060, "density": "high"},
         {"state": "NY", "city": "Buffalo", "lat": 42.8864, "lon": -78.8784, "density": "medium"},
@@ -264,16 +296,18 @@ def generate_enhanced_neris_data():
     
     data = []
     dept_id = 1
-    
-    for region in regions:
+    region_cycle = iter(regions * ((num_departments // len(regions)) + 1))
+    while len(data) < num_departments:
+        region = next(region_cycle)
         if region["density"] == "high":
-            num_depts = random.randint(12, 20)
+            num_depts = 1
         elif region["density"] == "medium":
-            num_depts = random.randint(6, 12)
+            num_depts = 1
         else:
-            num_depts = random.randint(3, 6)
-        
+            num_depts = 1
         for i in range(num_depts):
+            if len(data) >= num_departments:
+                break
             state_code = f"{random.randint(1, 50):02d}"
             county_code = f"{random.randint(1, 99):03d}"
             dept_code = f"{dept_id:03d}"
@@ -336,12 +370,13 @@ def generate_enhanced_neris_data():
     
     return pd.DataFrame(data)
 
-# Load data
+# Load data with user-selected department count
 @st.cache_data
-def load_data():
-    return generate_enhanced_neris_data()
 
-data = load_data()
+def load_data(num_departments=100):
+    return generate_enhanced_neris_data(num_departments)
+
+data = load_data(num_simulated_departments)
 
 # Priority 2: Real-time activity simulation
 def simulate_real_time_activity():
@@ -380,12 +415,19 @@ def simulate_real_time_activity():
 simulate_real_time_activity()
 
 # Header section with real-time indicator
+header_text_color = '#1a1a1a' if theme == 'Light Mode' else '#fff'
+header_bg_color = '#fff' if theme == 'Light Mode' else '#2d2d2d'
+header_border_color = '#e0e0e0' if theme == 'Light Mode' else '#404040'
+
 st.markdown(f"""
-<div class="neris-header">
-    <h2 style="margin: 0; color: inherit;">
-        <span class="real-time-indicator"></span>🗺️ Fire Department Onboarding Dashboard
+<div class="neris-header" style="background: {header_bg_color}; border-bottom: 2px solid {header_border_color}; padding: 1.2rem 1rem 1rem 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <h2 style="margin: 0; color: {header_text_color}; font-weight: 900; font-size: 2.2rem; letter-spacing: -1px;">
+        <span class="real-time-indicator"></span>
+        <span style='vertical-align: middle;'>🗺️ Fire Department Onboarding Dashboard</span>
     </h2>
-    <p style="margin: 0.5rem 0 0 0; opacity: 0.8;">National Emergency Response Information System (NERIS) | Live Dashboard</p>
+    <p style="margin: 0.5rem 0 0 0; opacity: 0.92; color: {header_text_color}; font-weight: 600; font-size: 1.1rem; letter-spacing: 0.01em;">
+        National Emergency Response Information System (NERIS) | Live Dashboard
+    </p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -460,8 +502,8 @@ with st.sidebar:
     else:
         st.markdown('<div class="activity-feed"><p>No recent activity</p></div>', unsafe_allow_html=True)
     
-    # Auto-refresh toggle
-    auto_refresh = st.checkbox("🔄 Auto-refresh", value=True)
+    # Auto-refresh toggle (now off by default)
+    auto_refresh = st.checkbox("🔄 Auto-refresh", value=False)
     if auto_refresh:
         time.sleep(1)
         st.rerun()
@@ -525,34 +567,44 @@ with col1:
 
 with col2:
     # Enhanced layers panel
-    st.markdown("### 🎛️ LAYERS")
-    
+    if theme == "Light Mode":
+        st.markdown('<span class="neris-section-header">🎛️ LAYERS</span>', unsafe_allow_html=True)
+    else:
+        st.markdown('### 🎛️ LAYERS')
     show_verified = st.checkbox("🔵 Verified Departments", value=True)
     show_unverified = st.checkbox("🟠 Unverified Departments", value=True)  
     show_inactive = st.checkbox("⚫ Inactive", value=True)
-    
-    st.markdown("---")
+    if theme == "Light Mode":
+        st.markdown('<span class="neris-label">Basemap</span>', unsafe_allow_html=True)
     st.checkbox("🗺️ Basemap", value=True)
     
     # Enhanced filters
-    st.markdown("### 🔍 FILTERS")
+    if theme == "Light Mode":
+        st.markdown('<span class="neris-section-header">🔍 FILTERS</span>', unsafe_allow_html=True)
+    else:
+        st.markdown('### 🔍 FILTERS')
     selected_states = st.multiselect(
-        "States",
+        "States" if theme != "Light Mode" else "",
         options=sorted(data['State'].unique()),
         default=[]
     )
-    
-    min_data_quality = st.slider("Min Data Quality %", 0, 100, 0)
-    
+    if theme == "Light Mode":
+        st.markdown('<span class="neris-label">Min Data Quality %</span>', unsafe_allow_html=True)
+    min_data_quality = st.slider("Min Data Quality %" if theme != "Light Mode" else "", 0, 100, 0)
+    if theme == "Light Mode":
+        st.markdown('<span class="neris-label">API Status</span>', unsafe_allow_html=True)
     api_status_filter = st.multiselect(
-        "API Status",
+        "API Status" if theme != "Light Mode" else "",
         options=data['API_Status'].unique(),
         default=[]
     )
     
     # Priority 4: Verification workflow panel
     st.markdown("---")
-    st.markdown("### ⚡ Quick Actions")
+    if theme == "Light Mode":
+        st.markdown('<span class="neris-section-header">⚡ Quick Actions</span>', unsafe_allow_html=True)
+    else:
+        st.markdown('### ⚡ Quick Actions')
     
     st.markdown('<div class="verification-panel">', unsafe_allow_html=True)
     
@@ -571,10 +623,9 @@ with col2:
         )
     
     # Bulk verification tools
-    st.markdown("**Bulk Operations:**")
+    st.markdown("<span style='font-weight: 700; font-size: 1.1rem; color: #1a1a1a; background: #f3f6fa; border-radius: 6px; padding: 4px 12px; display: inline-block; margin-bottom: 0.5rem;'>Bulk Operations</span>", unsafe_allow_html=True)
     if st.button("✅ Verify Selected", use_container_width=True):
         st.success("Batch verification initiated!")
-    
     if st.button("📧 Send Reminders", use_container_width=True):
         st.info("Reminder emails sent to unverified departments!")
     
@@ -649,7 +700,10 @@ if st.session_state.selected_department is not None:
 
 # Enhanced department status table
 st.markdown("---")
-st.markdown("### 📋 Department Status")
+if theme == "Light Mode":
+    st.markdown('<span class="neris-section-header">📋 Department Status</span>', unsafe_allow_html=True)
+else:
+    st.markdown('### 📋 Department Status')
 
 # Table controls
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -701,17 +755,22 @@ table_data.columns = [
     'Data Quality %', 'API Status', 'Incidents', 'Users'
 ]
 
-st.dataframe(
-    table_data,
-    use_container_width=True,
-    hide_index=True,
-    column_config={
-        "Status": st.column_config.TextColumn(width="medium"),
-        "Data Quality %": st.column_config.NumberColumn(format="%d%%"),
-        "Incidents": st.column_config.NumberColumn(format="%d"),
-        "Users": st.column_config.NumberColumn(format="%d")
-    }
-)
+# Show a note and use st.table in light mode for better readability
+if theme == "Light Mode":
+    st.markdown('<div class="neris-info">For best readability, try Dark Mode. Table below uses enhanced contrast.</div>', unsafe_allow_html=True)
+    st.table(table_data)
+else:
+    st.dataframe(
+        table_data,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Status": st.column_config.TextColumn(width="medium"),
+            "Data Quality %": st.column_config.NumberColumn(format="%d%%"),
+            "Incidents": st.column_config.NumberColumn(format="%d"),
+            "Users": st.column_config.NumberColumn(format="%d")
+        }
+    )
 
 # Enhanced footer
 st.markdown("---")
