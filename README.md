@@ -1,99 +1,85 @@
-# 🚒 Fire Department Data & Dashboard
+# 🚒 NERIS Fire Department Dashboard
 
-Welcome to the Fire Department Data & Dashboard project! This project visualizes US fire department and station data on an interactive map using Python and Streamlit.
+Welcome to the **NERIS Fire Department Dashboard**! 🗺️
 
----
-
-## 🗺️ Dashboard Features
-
-- **Interactive Map:**
-  - Visualize fire stations across the US
-  - Filter by state, department type, and more
-  - Click on markers for department/station details
-- **Summary Statistics:**
-  - Number of stations, types, and personnel
-- **Modern UI:**
-  - Clean, responsive, and visually appealing
+A modern, interactive dashboard for visualizing, filtering, and analyzing U.S. fire department data. Built for clarity, speed, and real-time insights—perfect for emergency response analytics, research, and public safety innovation.
 
 ---
 
-## 📊 Example Data
+## ✨ Features
 
-| Fire Dept Name | Station Name | Station Address | City | State | Zip |
-|---------------|-------------|----------------|------|-------|-----|
-| Abbeville Fire Department | Central Station | 210 W Vermillion ST | Abbeville | LA | 70510-4612 |
-| 3-G Volunteer Fire Company, Inc. | 3-G Volunteer Fire Company, Inc. | Brantingham RD | Brantingham | NY | 13312 |
+- 🗺️ **Interactive Map**: Visualize fire departments nationwide
+- 🔍 **Advanced Filtering**: By state, data quality, API status, and more
+- 📊 **Real-Time Simulation**: See onboarding and activity updates live
+- 📈 **Summary Stats**: Key metrics at a glance
+- 🌓 **Dark/Light Mode**: Custom theming (see note below)
+- 📥 **Export Data**: Download filtered results as CSV
+- ⚡ **Quick Actions**: Batch verify, send reminders, and more
+
+---
+
+## ⚠️ Light Mode Notice
+
+> **Note:** Light Mode is not fully supported. For the best experience, please use **Dark Mode**.
+
+---
+
+## 🧠 Diagram
+
+A high-level view of the dashboard's data flow and logic:
+
+```
+[USFA CSV Data]
+      ↓
+[Data Processing/Geocoding]
+      ↓
+[Streamlit Dashboard]
+      ↓
+[Map | Filters | Real-time Simulation]
+      ↓
+[User Interface & Analytics]
+```
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### 1. Clone the repo
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/jellyfishing2346/fire-department.git
 cd fire-department
 ```
 
-### 2. Install requirements
+### 2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the Streamlit app
+### 3. Run the dashboard
 ```bash
 streamlit run dashboard.py
 ```
 
 ---
 
-## 🛠️ Requirements
-- Python 3.8+
-- Streamlit
-- pandas
-- geopy (for geocoding addresses)
-- folium
-- streamlit-folium
-- numpy
-- plotly
-- plotly-express
-- plotly-graph-objects
-
-Install all with:
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 📦 Deployment Notes
-- Ensure your `requirements.txt` includes all dependencies above for successful deployment (especially on Streamlit Cloud).
-- If you see `ModuleNotFoundError`, add the missing package to `requirements.txt` and redeploy.
-
----
-
-## 📂 File Structure
-
-```
-fire-department/
-├── dashboard.py           # Streamlit dashboard app
-├── requirements.txt       # Python dependencies
-├── usfa-registry-national.csv
-├── usfa-registry-station.csv
-└── README.md
-```
-
----
-
-## ✨ Screenshots
-
-![Dashboard Screenshot](assets/dashboard-screenshot.png)
-
----
-
-## 🤝 Contributing
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+## 🛠️ Usage
+- Use the sidebar to select display settings, filters, and simulation options.
+- Click map markers for department details.
+- Use quick actions for batch operations.
+- Export filtered data as CSV.
 
 ---
 
 ## 📄 License
-[MIT](LICENSE)
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🙌 Acknowledgments
+- U.S. Fire Administration (USFA) for data
+- Streamlit, Folium, Plotly, and the open-source community
+
+---
+
+> _Modernizing emergency response data and analytics for America's fire service._
